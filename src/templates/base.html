@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" >
+  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  	<link
+    	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+    	integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+    	rel="stylesheet"
+  	  	crossorigin="anonymous"
+  	>
+	<title>{% block title %}{% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="{% static "css/base.css" %}">
+</head>
+<body>
+	<!--header content-->
+	<div id="header">
+		<span class="logo">MyMDB</span>
+		<ul class="menu">
+			<li {% if section == "list" %} class="selected" {% endif %}>
+				<a href="{% url "list" %}">All Movies</a>
+			</li>
+			{% if request.user.is_authenticated %}
+				<li {% if section == "profile" %} class="selected" {% endif %}>
+					<a href="#">Profile</a>
+				</li>
+			{% endif %}
+		</ul>
+
+		<span class="user">
+			{% if request.user.is_authenticated %}
+				Hello {{request.user.first_name}}, <a href="{%url "logout" %}">Logout</a>
+			{% else %}
+				<a href="{% url "login" %}">Log-In</a>
+			{% endif %}
+		</span>
+	</div>
+	<!-- end of the header -->
+
+	<div class="container">
+  		<div class="row">
+    		<div class="col-sm-8 mymdb-main">
+
+      			<!--display messages if any-->
+				{% if messages %}
+					<ul class="messages">
+						{% for message in messages %}
+							<li class="{{message.tags}}">{{message|safe}}<a href="#" class="close">x</a></li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+				<!-- message content end-->
+
+				<!-- main content block-->
+				<div id="content">
+					{% block content %}{% endblock %}
+				</div>
+				<!-- main content ends -->
+
+    		</div>
+    		<div class="col-sm-3 offset-sm-1 mymdb-sidebar">
+      			{% block sidebar %}{% endblock %}
+    		</div>
+  		</div>
+	</div>
+
+</body>
+</html>
