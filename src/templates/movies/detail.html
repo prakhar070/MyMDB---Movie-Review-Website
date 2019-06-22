@@ -15,7 +15,14 @@
 			</li>
 		{% endfor %}
 	</ul>
-
+	<p>Similar Movies - </p>
+	<ul>
+		{% for movie in similar_movies%}
+			<li>
+				<a href="{% url "detail" movie.id%}">{{movie}}</a>
+			</li>
+		{% endfor %}
+	</ul>
 	<div>
 		{% if commentform %}
 			<form method="post" action="{% url "AddComment" movie_id=object.id %}">

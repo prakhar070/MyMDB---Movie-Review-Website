@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 from taggit.models import Tag
 #from .models import Vote
 from django.db.models import F
+from django.db.models import Count
 # Create your views here.
 
 #view displaying a list of movies
@@ -54,7 +55,9 @@ class MovieDetail(DetailView):
 		ctx = super().get_context_data(**kwargs)
 		#updating the visits field of the movie object
 		Movie.objects.filter(id=self.kwargs['pk']).update(visits=F('visits')+1)
-
+		similar_tags = self.object.tags.values_list('id', flat=True)
+		similar_movies = Movie.objects.filter(tags__in=similar_tags).exclude(id=self.object.id)
+		similar_movies = similar_movies.annotate(same_tags=Count('tags')).order_by('-same_tags','-year')[:4]
 		if self.request.user.is_authenticated:
 			# to fetch object due to SingleObjectMixin of detailView
 			imageform = MovieImageForm({'user': self.request.user.id, 'movie':self.kwargs['pk'] })
@@ -71,6 +74,7 @@ class MovieDetail(DetailView):
 			ctx['vote_form_url']=vote_form_url
 			ctx['imageform']=imageform
 			ctx['commentform']=commentform
+		ctx['similar_movies'] = similar_movies
 		return ctx
 	
 
