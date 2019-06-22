@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.aggregates import Sum
 from django.conf import settings
 from uuid import uuid4
+from taggit.managers import TaggableManager
 
 # Create your models here.
 '''
@@ -71,6 +72,8 @@ class Movie(models.Model):
 	writers = models.ManyToManyField(to='Person', related_name='writing_credits', blank=True)
 	actors = models.ManyToManyField(to='Person', through='Role',related_name='acting_credits', blank=True)
 	
+
+	tags = TaggableManager()
 	#defining the custom made manager
 	#objects = MovieManager()
 	def as_elasticsearch_dict(self):
@@ -130,3 +133,24 @@ class MovieImage(models.Model):
 	image = models.ImageField(upload_to = 'images/%Y/%m/%d')
 	uploaded = models.DateTimeField(auto_now_add = True)
 	movie = models.ForeignKey(Movie, related_name="images",on_delete = models.CASCADE, blank=True)
+
+
+
+# model to represent comment
+class Comment(models.Model):
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="comments", on_delete=models.CASCADE)
+	body = models.TextField()
+	movie = models.ForeignKey(Movie, related_name="comments", on_delete=models.CASCADE)	
+	created = models.DateField(auto_now_add=True)
+	updated = models.DateField(auto_now=True)
+
+	class Meta:
+		ordering = ('created',)
+
+	def __str__(self):
+		return "comment by {} on {}".format(self.user.first_name, self.movie)
+
+	#model ban gya hai
+	# ab iske correspondin form
+	#uske baad form ko detail view me add karna hai
+	#uske baad createview se comment create karnabh

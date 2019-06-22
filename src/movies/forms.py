@@ -1,6 +1,6 @@
 from django import forms
 from django.db.models import Count
-from .models import Vote, Movie, MovieImage
+from .models import Vote, Movie, MovieImage, Comment
 from django.contrib.auth import get_user_model 
 #from django.core.validators import MaxValueValidator
 
@@ -22,4 +22,12 @@ class MovieImageForm(forms.ModelForm):
 		model = MovieImage
 		fields = ('user', 'movie','image')
 
+
+class CommentForm(forms.ModelForm):
+	user = forms.ModelChoiceField(widget=forms.HiddenInput, queryset=get_user_model().objects.all())
+	movie = forms.ModelChoiceField(widget=forms.HiddenInput, queryset=Movie.objects.all())
+
+	class Meta:
+		model = Comment
+		fields = ('user','movie', 'body')
 

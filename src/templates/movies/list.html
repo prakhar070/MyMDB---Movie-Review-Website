@@ -2,16 +2,26 @@
 {% block title %}All the movies{% endblock %}
 
 {% block content %}
+
 	<nav>
 		<ul>
-			<li><a href="{% url 'list' %}?sort_by=Rating">Rating</a></li>
-			<li><a href="{% url 'list' %}?sort_by=Popularity">Popularity</a></li>
-			<li><a href="{% url 'list' %}?sort_by=Latest">Latest</a></li>
+			<p>tag value is {{tag}}</p>
+			<li><a href="{% url 'list' %}?sort_by=Rating&tag={{tag}}">Rating</a></li>
+			<li><a href="{% url 'list' %}?sort_by=Popularity&tag={{tag}}">Popularity</a></li>
+			<li><a href="{% url 'list' %}?sort_by=Latest&tag={{tag}}">Latest</a></li>
+		</ul>
+	</nav>
+	<nav>
+		<ul>
+			{% for tag in tags%}
+				<li><a href="{% url 'list'%}?tag={{tag.slug}}&sort_by={{sort_by}}">{{tag.name}}</a></li>
+			{% endfor %}
 		</ul>
 	</nav>
 	<ul>
 		{% for movie in object_list %}
 			<li>
+
 				<a href="{% url "detail" movie.id%}">{{movie}}</a>
 			</li>
 		{% empty %}

@@ -6,6 +6,7 @@
 		<h1>{{object}}</h1>
 		<p class="lead">{{object.plot}}</p>
 	</div>
+	<p>Tags= {{object.tags.all|join:", "}}</p>
 	<ul class="movie-image list-inline">
 		{% for image in object.images.all %}
 			<li class="list-inline-item">
@@ -14,6 +15,18 @@
 			</li>
 		{% endfor %}
 	</ul>
+
+	<div>
+		{% if commentform %}
+			<form method="post" action="{% url "AddComment" movie_id=object.id %}">
+				{% csrf_token %}
+				{{commentform.as_p}}
+				<button class="btn btn-primary" >Comment</button>
+			</form>
+		{% else %}
+			<p>Log-in to make a comment </p>	
+		{% endif %}
+	</div>
 {% endblock %}
 {% block sidebar %}
 	<div>

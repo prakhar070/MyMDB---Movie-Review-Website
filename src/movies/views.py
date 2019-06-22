@@ -1,11 +1,11 @@
-from django.shortcuts import render, reverse, redirect
+from django.shortcuts import render, reverse, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 from .models import Movie,Person,Vote
-from .forms import VoteForm,MovieImageForm
+from .forms import VoteForm,MovieImageForm, CommentForm
 from django.core.exceptions import ValidationError
-
+from taggit.models import Tag
 #from .models import Vote
 from django.db.models import F
 # Create your views here.
@@ -14,17 +14,36 @@ from django.db.models import F
 class MovieList(ListView):
 	model = Movie
 	paginate_by = 10
+	sort_by = None
+	tag = None
 
 	def get_queryset(self):
-		sort_by = self.request.GET.get('sort_by')
-		if sort_by is None:
-			return Movie.objects.all()
-		elif sort_by == 'Rating':
-			return Movie.objects.all().order_by('-score')
-		elif sort_by == 'Popularity':
-			return Movie.objects.all().order_by('-visits')
-		elif sort_by == 'Latest':
-			return Movie.objects.all().order_by('-year')
+		self.sort_by = self.request.GET.get('sort_by')
+		self.tag = self.request.GET.get('tag')
+		queryset = Movie.objects.all()
+				
+
+		print ("sort_by and tag are {} {}".format(self.sort_by, self.tag))
+		if self.sort_by == 'Rating':
+			queryset = queryset.order_by('-score')
+		elif self.sort_by == 'Popularity':
+			queryset = queryset.order_by('-visits')
+		elif self.sort_by == 'Latest':
+			queryset = queryset.order_by('-year')
+
+		if self.tag is not None:
+			tag = get_object_or_404(Tag, slug=self.tag)
+			queryset = queryset.filter(tags__in=[tag])
+
+		return queryset
+
+
+	def get_context_data(self, **kwargs):
+		ctx = super().get_context_data(**kwargs)
+		ctx['tags'] = Movie.tags.all() 
+		ctx['sort_by'] = self.sort_by
+		ctx['tag'] = self.tag
+		return ctx
 
 
 class MovieDetail(DetailView):
@@ -39,6 +58,7 @@ class MovieDetail(DetailView):
 		if self.request.user.is_authenticated:
 			# to fetch object due to SingleObjectMixin of detailView
 			imageform = MovieImageForm({'user': self.request.user.id, 'movie':self.kwargs['pk'] })
+			commentform = CommentForm()
 			vote = Vote.objects.get_vote_or_unsaved_blank_vote(movie=self.object, user=self.request.user)
 			if vote.id:
 				vote_form_url = reverse('UpdateVote', kwargs={'movie_id':vote.movie.id, 'pk':vote.id})
@@ -50,6 +70,7 @@ class MovieDetail(DetailView):
 			ctx['vote_form']=vote_form
 			ctx['vote_form_url']=vote_form_url
 			ctx['imageform']=imageform
+			ctx['commentform']=commentform
 		return ctx
 	
 
@@ -117,6 +138,43 @@ class MovieImageUpload(LoginRequiredMixin, CreateView):
 	def get_success_url(self):
 		movie_id = self.kwargs['movie_id']
 		return reverse('detail', kwargs={'pk':movie_id})
+
+class AddComment(LoginRequiredMixin, CreateView):
+	form_class = CommentForm
+
+	def get_initial(self):
+		# url of the form : movie/<int:movie_id>/vote
+		initial = super().get_initial()
+		#for providing initial values to the form
+		initial['user'] = self.request.user.id
+		initial['movie'] = self.kwargs['movie_id']
+		return initial
+
+	#after success go to this url
+	def get_success_url(self):
+		movie_id = self.kwargs['movie_id']
+		return reverse('detail', kwargs={'pk':movie_id})
+
+	def get_form_kwargs(self):
+		kwargs = {
+			'initial': self.get_initial(),
+			'prefix': self.get_prefix(),
+		}
+
+		if self.request.method in ('POST', 'PUT'):
+			kwargs.update({
+				'data': self.request.POST,
+				'files': self.request.FILES,
+			})
+		print("kwargs are {}".format(kwargs))
+		return super().get_form_kwargs()
+
+	#if the form was invalid then go to this url
+	def render_to_response(self, context=None, **response_kwargs):
+		movie_id = self.kwargs['movie_id']
+		return redirect(to = reverse('detail', kwargs={'pk':movie_id}))
+
+
 
 
 
