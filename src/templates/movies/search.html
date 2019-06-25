@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h2>Search</h2>
+	<form method="get" class="form-inline">
+		<input placeholder="Search" type="search" name="q" value="{{query}}">
+		<button type="submit" class="btn btn-primary">Search</button>
+	</form>
+	{% if query %}
+		<h3>Results from search query '{{query}}'</h3>
+		<ul>
+			{% for hit in hits %}
+			<li><a href="{% url 'detail' pk=hit.id%} ">{{hit.title}}</a></li>
+			{% empty %}
+				<p>No results found</p>
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endblock %}

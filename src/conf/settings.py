@@ -141,5 +141,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR,"media")
 
 #settings for the elastic search server
 ES_INDEX = 'movies' 
-ES_PORT = '127.0.0.1'
-ES_HOST = '9200'
+ES_HOST= '127.0.0.1'
+ES_PORT = '9200'

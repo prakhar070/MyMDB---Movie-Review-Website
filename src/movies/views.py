@@ -9,6 +9,8 @@ from taggit.models import Tag
 #from .models import Vote
 from django.db.models import F
 from django.db.models import Count
+from django.views.generic import TemplateView
+from movies.service.elasticsearch import search_for_movies
 # Create your views here.
 
 #view displaying a list of movies
@@ -150,9 +152,9 @@ class AddComment(LoginRequiredMixin, CreateView):
 		# url of the form : movie/<int:movie_id>/vote
 		initial = super().get_initial()
 		#for providing initial values to the form
-		initial['user'] = self.request.user.id
-		initial['movie'] = self.kwargs['movie_id']
-		return initial
+		initial['user'] = self.request.user
+		initial['movie'] = Movie.objects.get(id=self.kwargs['movie_id'])
+		return initial.copy()
 
 	#after success go to this url
 	def get_success_url(self):
@@ -177,6 +179,21 @@ class AddComment(LoginRequiredMixin, CreateView):
 	def render_to_response(self, context=None, **response_kwargs):
 		movie_id = self.kwargs['movie_id']
 		return redirect(to = reverse('detail', kwargs={'pk':movie_id}))
+
+class SearchView(TemplateView):
+	template_name = 'movies/search.html'
+
+	def get_context_data(self, **kwargs):
+		query = self.request.GET.get('q',None)
+		ctx = super().get_context_data(query=query, **kwargs)
+		if query:
+			results = search_for_movies(query)
+			ctx['hits'] = results
+		return ctx
+
+
+
+
 
 
 

@@ -17,6 +17,12 @@
 	<!--header content-->
 	<div id="header">
 		<span class="logo">MyMDB</span>
+		<!-- search form starts--->
+		<form class="form_inline" action="{% url 'question_search' %}" method="get">
+			<input type="search" name="q" placeholder="Search">
+			<button class="btn btn-primary" type="submit">Search</button>
+		</form>
+		<!--search form ends -->
 		<ul class="menu">
 			<li {% if section == "list" %} class="selected" {% endif %}>
 				<a href="{% url "list" %}">All Movies</a>

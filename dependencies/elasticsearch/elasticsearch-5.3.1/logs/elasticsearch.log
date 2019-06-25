@@ -1,0 +1,27 @@
+[2019-06-25T12:08:17,472][INFO ][o.e.n.Node               ] [] initializing ...
+[2019-06-25T12:08:17,643][INFO ][o.e.e.NodeEnvironment    ] [4W22avE] using [1] data paths, mounts [[/ (/dev/sda9)]], net usable_space [55.1gb], net total_space [74.9gb], spins? [possibly], types [ext4]
+[2019-06-25T12:08:17,643][INFO ][o.e.e.NodeEnvironment    ] [4W22avE] heap size [1.9gb], compressed ordinary object pointers [true]
+[2019-06-25T12:08:17,646][INFO ][o.e.n.Node               ] node name [4W22avE] derived from node ID [4W22avEURIyM5LDy-6MfYw]; set [node.name] to override
+[2019-06-25T12:08:17,647][INFO ][o.e.n.Node               ] version[5.3.1], pid[26782], build[5f9cf58/2017-04-17T15:52:53.846Z], OS[Linux/4.18.0-22-generic/amd64], JVM[Oracle Corporation/OpenJDK 64-Bit Server VM/11.0.3/11.0.3+7-Ubuntu-1ubuntu218.04.1]
+[2019-06-25T12:08:19,254][INFO ][o.e.p.PluginsService     ] [4W22avE] loaded module [aggs-matrix-stats]
+[2019-06-25T12:08:19,254][INFO ][o.e.p.PluginsService     ] [4W22avE] loaded module [ingest-common]
+[2019-06-25T12:08:19,255][INFO ][o.e.p.PluginsService     ] [4W22avE] loaded module [lang-expression]
+[2019-06-25T12:08:19,256][INFO ][o.e.p.PluginsService     ] [4W22avE] loaded module [lang-groovy]
+[2019-06-25T12:08:19,256][INFO ][o.e.p.PluginsService     ] [4W22avE] loaded module [lang-mustache]
+[2019-06-25T12:08:19,256][INFO ][o.e.p.PluginsService     ] [4W22avE] loaded module [lang-painless]
+[2019-06-25T12:08:19,257][INFO ][o.e.p.PluginsService     ] [4W22avE] loaded module [percolator]
+[2019-06-25T12:08:19,257][INFO ][o.e.p.PluginsService     ] [4W22avE] loaded module [reindex]
+[2019-06-25T12:08:19,258][INFO ][o.e.p.PluginsService     ] [4W22avE] loaded module [transport-netty3]
+[2019-06-25T12:08:19,258][INFO ][o.e.p.PluginsService     ] [4W22avE] loaded module [transport-netty4]
+[2019-06-25T12:08:19,259][INFO ][o.e.p.PluginsService     ] [4W22avE] no plugins loaded
+[2019-06-25T12:08:22,639][INFO ][o.e.n.Node               ] initialized
+[2019-06-25T12:08:22,640][INFO ][o.e.n.Node               ] [4W22avE] starting ...
+[2019-06-25T12:08:23,039][INFO ][o.e.t.TransportService   ] [4W22avE] publish_address {127.0.0.1:9300}, bound_addresses {[::1]:9300}, {127.0.0.1:9300}
+[2019-06-25T12:08:23,060][WARN ][o.e.b.BootstrapChecks    ] [4W22avE] max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]
+[2019-06-25T12:08:23,060][WARN ][o.e.b.BootstrapChecks    ] [4W22avE] max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+[2019-06-25T12:08:26,205][INFO ][o.e.c.s.ClusterService   ] [4W22avE] new_master {4W22avE}{4W22avEURIyM5LDy-6MfYw}{oai2M2cFQQOoD_TS02WNQQ}{127.0.0.1}{127.0.0.1:9300}, reason: zen-disco-elected-as-master ([0] nodes joined)
+[2019-06-25T12:08:26,250][INFO ][o.e.h.n.Netty4HttpServerTransport] [4W22avE] publish_address {127.0.0.1:9200}, bound_addresses {[::1]:9200}, {127.0.0.1:9200}
+[2019-06-25T12:08:26,254][INFO ][o.e.n.Node               ] [4W22avE] started
+[2019-06-25T12:08:26,530][INFO ][o.e.g.GatewayService     ] [4W22avE] recovered [0] indices into cluster_state
+[2019-06-25T12:12:48,937][INFO ][o.e.c.m.MetaDataCreateIndexService] [4W22avE] [movies] creating index, cause [api], templates [], shards [5]/[1], mappings []
+[2019-06-25T13:28:29,905][INFO ][o.e.c.m.MetaDataMappingService] [4W22avE] [movies/eLOuLGT8QRy3PuUW2WbFPw] create_mapping [doc]
