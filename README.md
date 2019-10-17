@@ -1,4 +1,4 @@
-<h2>MYmdb</h2>
+<h2>MyMDB</h2>
 <p>An interactive <b>movie review</b> web application made with <b>django backend</b>. Users can visit this website to get 
 movie recommendations according to their priorities.</p>
 
